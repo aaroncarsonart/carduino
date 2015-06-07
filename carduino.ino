@@ -11,11 +11,9 @@ const unsigned char _M2PWM = 10;
 
 
 // helper method to run motor from pin with speed for millis.
-void runMotor(int speedPin, int directionPin, int mSpeed, int mDirection, int mMillis){
+void runMotor(int speedPin, int directionPin, int mSpeed, int mDirection){
   analogWrite(speedPin, mSpeed);
   digitalWrite(directionPin, mDirection);
-  //delay(mMillis);
-  //analogWrite(speedPin, 0);
 }
 
 
@@ -30,75 +28,140 @@ void stopTurn(){
 
 
 // Turn the drive wheels forward at speed for time milliseconds.
-void moveForward(int mSpeed, int mMillis){
+void moveForward(int mSpeed){
     // drive forward
-    runMotor(_M1PWM, _M1DIR, mSpeed, LOW, mMillis);
+    runMotor(_M1PWM, _M1DIR, mSpeed, HIGH);
 }
 
 
 // Turn the drive wheels backward at speed for time milliseconds.
-void moveBackward(int mSpeed, int mMillis){
+void moveBackward(int mSpeed){
     // drive reverse
-    runMotor(_M1PWM, _M1DIR, mSpeed, HIGH, mMillis);
+    runMotor(_M1PWM, _M1DIR, mSpeed, LOW);
 }
 
 
 // Rotate the back wheel left at speed for time milliseconds.
-void turnLeft(int mSpeed, int mMillis){
+void turnLeft(int mSpeed){
     // turn left
-    runMotor(_M2PWM, _M2DIR, mSpeed, HIGH, mMillis);  
+    runMotor(_M2PWM, _M2DIR, mSpeed, HIGH);  
 
 }
 
 // Rotate the back wheel right at speed for time milliseconds.
-void turnRight(int mSpeed, int mMillis){
+void turnRight(int mSpeed){
     // turn right direction
-    runMotor(_M2PWM, _M2DIR, mSpeed, LOW, mMillis); 
+    runMotor(_M2PWM, _M2DIR, mSpeed, LOW); 
 }
 
 
 // Move the Carduino in a circle.
 void moveCircle(int driveSpeed, int mMillis){
-  turnLeft(150, 1000);
-  moveForward(driveSpeed, 1000);
+  turnLeft(driveSpeed);
+  moveForward(driveSpeed);
   delay(mMillis);
   stopMovement();
   stopTurn();
 }
 
-/*
 // move the Carduino in a box.
-void moveBox(int iterations){
-	printf("\nmoveBox(%i);\n", iterations);	
-	printf("move in a box pattern %i times\n", iterations);	
+void moveBox(int mDelay){
+  int mSpeed = 120;
+  int tSpeed = 150;
+  int tDelay = 1250;
+  
+  // ********************************
+  // leg 1
+  // ********************************
+  
+  // turn
+  turnRight(tSpeed);
+  moveForward(mSpeed);
+  delay(tDelay);
+  stopTurn();
 
-	// TODO not implemented
-	printf("TODO not implemented\n");	
-	delay(1000);
+  // straight movement  
+  delay(mDelay);
+  
+  // turn again
+  turnRight(tSpeed);
+  delay(tDelay);  
+  stopMovement();
+
+ 
+  // ********************************
+  // leg 2
+  // ********************************
+  
+  // turn
+  turnLeft(tSpeed);
+  moveBackward(mSpeed);
+  delay(tDelay);
+  stopTurn();
+
+  // straight movement  
+  delay(mDelay);
+  
+  // turn again
+  turnLeft(tSpeed);
+  delay(tDelay);  
+  stopMovement();
+
+  
+  // ********************************
+  // leg 3
+  // ********************************
+  
+  // turn
+  turnRight(tSpeed);
+  moveForward(mSpeed);
+  delay(tDelay);
+  stopTurn();
+
+  // straight movement  
+  delay(mDelay);
+  
+  // turn again
+  turnRight(tSpeed);
+  delay(tDelay);  
+  stopMovement();
+   
+  // ********************************
+  // leg 4
+  // ********************************
+  
+  // turn
+  turnLeft(tSpeed);
+  moveBackward(mSpeed);
+  delay(tDelay);
+  stopTurn();
+
+  // straight movement  
+  delay(mDelay);
+  
+  // turn again
+  turnLeft(tSpeed);
+  delay(tDelay);
+  stopMovement();
 }
 
-// move the Carduino randomly.
-void moveRandom(){
-	printf("\nmoveRandom();\n");	
-	printf("move in some randomly determined pattern.\n");	
-	
-	// TODO not implemented
-	printf("TODO not implemented\n");
-	delay(1000);
-			
-}
-*/
+int current = 0;
 
 // test the Carduino move methods.
 void test(){
-  /*
-	printf("\ntest();\n");	
-	moveForward(150, 2000);
-	//moveBackward(255, 1000);
-	//turnLeft(15, 60);
-	//turnRight(22, 777);
-	delay(1000);
-*/
+    if(current++ < 3) {     
+
+      moveCircle(150, 12000);
+    //moveBox(2000);
+
+    //wait
+    delay (1000);
+  }
+
+   else {
+     delay(100000); 
+   }
+
 }
 
 // ****************************************************************
@@ -125,52 +188,10 @@ void setup() {
 
 }
 
-int current = 0;
 
 // put your main code here, to run repeatedly:
 void loop() {
-  // run five times
-  if(current++ < 3) {
-    
-    /*
-    // drive forward
-    runMotor(_M1PWM, _M1DIR, 100, LOW, 1000);
-    
-    // drive reverse
-    runMotor(_M1PWM, _M1DIR, 100, HIGH, 1000);
-    
-    // turn right direction
-    runMotor(_M2PWM, _M2DIR, 150, LOW, 1000); 
-
-    // turn left
-    runMotor(_M2PWM, _M2DIR, 150, HIGH, 1000);  
-    */
-    
-    // TODO: add new code  
-    /*   
-    moveForward(100, 1000);
-    turnLeft(150, 1000);
-    delay(1000);
-    stopMovement();
-    stopTurn();
-    */
-    
-    moveCircle(120, 12000);
-    
-    //moveBackward(100, 1000);
-    //turnRight(150, 1000);
-    
-    //wait
-    delay (1000);
-  }
-
-   else {
-     delay(100000); 
-   }
+  // test();
+ // moveCircle(150, 12000);
+  moveBox(2000);
 }
-
-
-
-
-
-
