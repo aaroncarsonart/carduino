@@ -26,6 +26,44 @@ void stopTurn(){
   analogWrite(_M2PWM, 0); 
 }
 
+// Turn the drive wheels forward at speed for time milliseconds.
+void accelerateForward(int initial, int final, int aDelay){
+    // drive forward
+    for (int i = initial; i <= final; i++){
+        runMotor(_M1PWM, _M1DIR, i, HIGH); 
+        delay(aDelay);
+    } 
+}
+
+// Turn the drive wheels forward at speed for time milliseconds.
+void decellerateForward(int initial, int final, int aDelay){
+    // drive forward
+    for (int i = initial; i >= final; i--){
+        runMotor(_M1PWM, _M1DIR, i, HIGH);     
+        delay(aDelay);
+    } 
+}
+
+// Turn the drive wheels forward at speed for time milliseconds.
+void accelerateBackward(int initial, int final, int aDelay){
+    // drive forward
+    for (int i = initial; i <= final; i++){
+        runMotor(_M1PWM, _M1DIR, i, LOW);     
+        delay(aDelay);
+    } 
+}
+
+// Turn the drive wheels forward at speed for time milliseconds.
+void decellerateBackward(int initial, int final, int aDelay){
+    // drive forward
+    for (int i = initial; i >= final; i--){
+        runMotor(_M1PWM, _M1DIR, i, LOW);     
+        delay(aDelay);
+    } 
+}
+
+
+
 
 // Turn the drive wheels forward at speed for time milliseconds.
 void moveForward(int mSpeed){
@@ -66,6 +104,7 @@ void moveCircle(int driveSpeed, int mMillis){
 
 // move the Carduino in a box.
 void moveBox(int mDelay){
+  int mMinSpeed = 20;
   int mSpeed = 120;
   int tSpeed = 150;
   int tDelay = 1250;
@@ -145,6 +184,66 @@ void moveBox(int mDelay){
   stopMovement();
 }
 
+// move the Carduino in a box.
+void moveBoxAcceleration(){
+  int aDelay = 6;
+  int mMinSpeed = 20;
+  int mSpeed = 230;
+  int tSpeed = 150;
+  int tDelay = 1250;
+  
+  // ********************************
+  // leg 1
+  // ********************************
+  
+  // turn
+  turnRight(tSpeed);
+  accelerateForward(mMinSpeed, mSpeed, aDelay);
+  //delay(tDelay);
+  //delay(tDelay);  
+  decellerateForward(mSpeed, mMinSpeed, aDelay);
+  stopMovement();
+
+ 
+  // ********************************
+  // leg 2
+  // ********************************
+  
+  // turn
+  turnLeft(tSpeed);
+  accelerateBackward(mMinSpeed, mSpeed, aDelay);
+  //delay(tDelay);
+  //delay(tDelay);  
+  decellerateBackward(mSpeed, mMinSpeed, aDelay);
+  stopMovement();
+
+  
+  // ********************************
+  // leg 3
+  // ********************************
+  
+  // turn
+  turnRight(tSpeed);
+  accelerateForward(mMinSpeed, mSpeed, aDelay);
+  //delay(tDelay);
+  //delay(tDelay);  
+  decellerateForward(mSpeed, mMinSpeed, aDelay);
+  stopMovement();
+   
+  // ********************************
+  // leg 4
+  // ********************************
+  
+  // turn
+  turnLeft(tSpeed);
+  accelerateBackward(mMinSpeed, mSpeed, aDelay);
+  //delay(tDelay);
+  //delay(tDelay);  
+  decellerateBackward(mSpeed, mMinSpeed, aDelay);
+  stopMovement();
+}
+
+
 int current = 0;
 
 // test the Carduino move methods.
@@ -162,6 +261,19 @@ void test(){
      delay(100000); 
    }
 
+}
+
+// move forward and backward, quickly (with acceleration)
+void amandaSHANK(){
+  int MIN = 15;
+ int MAX = 255;
+ int DELAY = 1;
+ accelerateForward(MIN, MAX, DELAY);
+ decellerateForward(MAX, MIN, DELAY);
+ accelerateBackward(MIN, MAX, DELAY);
+ decellerateBackward(MAX, MIN, DELAY);
+ delay(500);
+ 
 }
 
 // ****************************************************************
@@ -191,7 +303,9 @@ void setup() {
 
 // put your main code here, to run repeatedly:
 void loop() {
-  // test();
+ // test();
  // moveCircle(150, 12000);
-  moveBox(2000);
+ // moveBox(250);
+ // amandaSHANK();
+ moveBoxAcceleration();
 }
